@@ -1,0 +1,40 @@
+#include<iostream>
+
+using namespace std;
+
+struct BTnode{
+    int data;
+    BTnode* lchild;
+    BTnode* rchild;
+    BTnode(int x):data(x),lchild(nullptr),rchild(nullptr){};
+};
+
+class BTree{
+    public:
+    BTnode *root;
+    BTree():root(nullptr){};
+    BTnode* build(){
+        int x;
+        if(!(cin>>x)) return nullptr;
+        if(x==-1) return nullptr;
+        BTnode *r=new BTnode(x);
+        r->lchild=build();
+        r->rchild=build();
+        return r;
+    }
+    int count(BTnode *r){
+        if(r==nullptr) return 0;
+        int self;
+        bool noleft=(r->lchild==nullptr);
+        bool noright=(r->rchild==nullptr);
+        self=noleft&&noright ?1:0;
+        return self+count(r->lchild)+count(r->rchild);
+    }
+};
+
+int main(){
+    BTree t;
+    t.root=t.build();
+    cout<<t.count(t.root);
+    return 0;
+}
