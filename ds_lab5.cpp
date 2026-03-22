@@ -86,19 +86,7 @@ static string decodeLine(const string& bits, Node* root) {
     return out;
 }
 
-static void freeTree(Node* root) {
-    if (!root) {
-        return;
-    }
-    freeTree(root->left);
-    freeTree(root->right);
-    delete root;
-}
-
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
     int n = 0;
     if (!(cin >> n)) {
         return 0;
@@ -132,6 +120,5 @@ int main() {
         fout << decoded;
     }
 
-    freeTree(root);
     return 0;
 }

@@ -5,8 +5,6 @@
 using namespace std;
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
 
 	string s;
 	if (!(cin >> s)) {
@@ -15,7 +13,7 @@ int main() {
 
 	int n = static_cast<int>(s.size());
 	if (n == 0) {
-		cout << s << "有0个好串：";
+		cout << s << "�?个好串：";
 		return 0;
 	}
 
@@ -72,7 +70,7 @@ int main() {
 		}
 	}
 
-	cout << s << "有" << goods.size() << "个好串：";
+	cout << s << "�? << goods.size() << "个好串：";
 	for (size_t i = 0; i < goods.size(); ++i) {
 		if (i > 0) {
 			cout << ' ';

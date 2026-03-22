@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<stack>
 
 using namespace std;
 
@@ -18,16 +19,16 @@ class Graph{
 		for(int i=0;i<V;i++){
 			if(visited[i]) continue;
 			++cnt;
-			vector<int> st;
-			st.push_back(i);
+			stack<int> st;
+			st.push(i);
 			visited[i]=1;
 			while(!st.empty()){
-				int cur=st.back();
-				st.pop_back();
+				int cur=st.top();
+				st.pop();
 				for(int nxt:adj[cur]){
 					if(!visited[nxt]){
 						visited[nxt]=1;
-						st.push_back(nxt);
+						st.push(nxt);
 					}
 				}
 			}

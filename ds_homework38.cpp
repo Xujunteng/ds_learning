@@ -1,25 +1,10 @@
 #include<iostream>
 #include<vector>
-#include<queue>
-
 using namespace std;
 
 struct Edge{
-	int to;
-	int w;
+	int to,w;
 	Edge(int v,int w0):to(v),w(w0){};
-};
-
-struct State{
-	long long dist;
-	int node;
-	State(long long d,int u):dist(d),node(u){};
-};
-
-struct Cmp{
-	bool operator()(const State &a,const State &b) const{
-		return a.dist>b.dist;
-	}
 };
 
 class Graph{
@@ -27,56 +12,36 @@ class Graph{
 	int n;
 	vector<vector<Edge>> adj;
 	Graph(int n0):n(n0),adj(n0+1){};
-	void addEdge(int u,int v,int w){
-		adj[u].push_back(Edge(v,w));
-	}
-	long long secondShortest(int s,int t){
-		const long long INF=4e18;
-		vector<long long> dist1(n+1,INF);
-		vector<long long> dist2(n+1,INF);
-		// dist1: shortest, dist2: strictly second shortest
-		priority_queue<State,vector<State>,Cmp> pq;
-		dist1[s]=0;
-		pq.push(State(0,s));
-		while(!pq.empty()){
-			State cur=pq.top();
-			pq.pop();
-			long long d=cur.dist;
-			int u=cur.node;
-			if(d>dist2[u]) continue;
-			for(const auto &e:adj[u]){
-				long long nd=d+e.w;
-				if(nd<dist1[e.to]){
-					dist2[e.to]=dist1[e.to];
-					dist1[e.to]=nd;
-					pq.push(State(nd,e.to));
-				}else if(nd>dist1[e.to] && nd<dist2[e.to]){
-					dist2[e.to]=nd;
-					pq.push(State(nd,e.to));
+	void addEdge(int u,int v,int w){adj[u].push_back(Edge(v,w));}
+	long  secondShortest(int s,int t){
+		vector<long > d1(n+1,-1),d2(n+1,-1);
+		vector<bool> v1(n+1,false),v2(n+1,false);
+		d1[s]=0;
+		while(1){
+			int u=-1;long best;bool sec=0;
+			for(int i=1;i<=n;i++){
+				if(!v1[i]&&d1[i]!=-1&&(u==-1||d1[i]<best)) u=i,best=d1[i],sec=0;
+				if(!v2[i]&&d2[i]!=-1&&(u==-1||d2[i]<best)) u=i,best=d2[i],sec=1;
+			}
+			if(u==-1)break;
+			if(sec)v2[u]=1;else v1[u]=1;
+			for(auto &e:adj[u]){
+				long nd=best+e.w;
+				if(d1[e.to]==-1||nd<d1[e.to]){
+					d2[e.to]=d1[e.to];d1[e.to]=nd;
+				}else if(nd>d1[e.to]&&(d2[e.to]==-1||nd<d2[e.to])){
+					d2[e.to]=nd;
 				}
 			}
 		}
-		if(dist2[t]>=INF/2) return -1;
-		return dist2[t];
+		return d2[t];
 	}
 };
 
 int main(){
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-	int n;
-	int m;
-	int s;
-	int t;
-	if(!(cin>>n>>m>>s>>t)) return 0;
+	int n,m,s,t;cin>>n>>m>>s>>t;
 	Graph g(n);
-	for(int i=0;i<m;i++){
-		int u;
-		int v;
-		int w;
-		cin>>u>>v>>w;
-		g.addEdge(u,v,w);
-	}
+	for(int i=0,u,v,w;i<m;i++){cin>>u>>v>>w;g.addEdge(u,v,w);}
 	cout<<g.secondShortest(s,t);
 	return 0;
 }

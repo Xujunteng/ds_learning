@@ -150,9 +150,6 @@ static int evalByReverseLevel(const vector<Node*>& levelOrder) {
 }
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-
 	string expr;
 	if (!getline(cin, expr)) {
 		return 0;

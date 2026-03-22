@@ -7,7 +7,7 @@ vector<vector<int>> vis;
 int ans = -1;
 bool found_path = false;
 
-int dirs[4][2] = {{-1,0},{0,1},{1,0},{0,-1}}; // 上, 右, 下, 左
+int dirs[4][2] = {{-1,0},{0,1},{1,0},{0,-1}}; // �? �? �? �?
 
 void dfs(int x, int y, int len) {
 	if (found_path) return;
@@ -29,8 +29,6 @@ void dfs(int x, int y, int len) {
 }
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
 
 	if (!(cin >> n >> m)) return 0;
 	g.assign(n, vector<int>(m, 0));
@@ -51,7 +49,7 @@ int main() {
 	}
 
 	vis.assign(n, vector<int>(m, 0));
-	dfs(0, 0, 1); // 起点算一个节点
+	dfs(0, 0, 1); // 起点算一个节�?
 
 	if (found_path) cout << ans;
 	else cout << -1;

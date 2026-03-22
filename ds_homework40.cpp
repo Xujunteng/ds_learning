@@ -1,45 +1,59 @@
 #include<iostream>
+#include<vector>
 
 using namespace std;
 
-const long long INF=4e18;
-
-int main(){
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
+class Graph{
+	public:
 	int n;
-	int m;
-	if(!(cin>>n>>m)) return 0;
-	static long long dist[205][205];
-	for(int i=1;i<=n;i++){
-		for(int j=1;j<=n;j++){
-			dist[i][j]=(i==j?0:INF);
+	vector<vector<long>> dist;
+	Graph(int n0):n(n0),dist(n0,vector<long>(n0)){
+		for(int i=0;i<n;i++){
+			for(int j=0;j<n;j++){
+				dist[i][j]=(i==j?0:-1);
+			}
 		}
+	};
+	void addEdge(int u,int v,long w){
+		if(dist[u][v]==-1||w<dist[u][v]) dist[u][v]=w;
 	}
-	for(int i=0;i<m;i++){
-		int u;
-		int v;
-		long long w;
-		cin>>u>>v>>w;
-		if(w<dist[u][v]) dist[u][v]=w;
-	}
-	for(int k=1;k<=n;k++){
-		for(int i=1;i<=n;i++){
-			if(dist[i][k]>=INF/2) continue;
-			for(int j=1;j<=n;j++){
-				if(dist[k][j]>=INF/2) continue;
-				long long nd=dist[i][k]+dist[k][j];
-				if(nd<dist[i][j]) dist[i][j]=nd;
+	void floyd(){
+		for(int k=0;k<n;k++){
+			for(int i=0;i<n;i++){
+				if(dist[i][k]==-1) continue;
+				for(int j=0;j<n;j++){
+					if(dist[k][j]==-1) continue;
+					long nd=dist[i][k]+dist[k][j];
+					if(dist[i][j]==-1||nd<dist[i][j]) dist[i][j]=nd;
+				}
 			}
 		}
 	}
-	for(int i=1;i<=n;i++){
-		for(int j=1;j<=n;j++){
-			if(j>1) cout<<" ";
-			if(dist[i][j]>=INF/2) cout<<"INF";
-			else cout<<dist[i][j];
+	void print(){
+		for(int i=0;i<n;i++){
+			for(int j=0;j<n;j++){
+				if(j>0) cout<<" ";
+				if(dist[i][j]==-1) cout<<"-1";
+				else cout<<dist[i][j];
+			}
+			if(i<n-1) cout<<"\n";
 		}
-		if(i<n) cout<<"\n";
 	}
+};
+
+int main(){
+	int n;
+	int m;
+	if(!(cin>>n>>m)) return 0;
+	Graph g(n);
+	for(int i=0;i<m;i++){
+		int u;
+		int v;
+		long w;
+		cin>>u>>v>>w;
+		g.addEdge(u-1,v-1,w);
+	}
+	g.floyd();
+	g.print();
 	return 0;
 }
